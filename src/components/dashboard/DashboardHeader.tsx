@@ -23,7 +23,7 @@ export const DashboardHeader = ({ onViewChange, setShowCreateProject, setShowCre
   const setActiveView = onViewChange || (() => {})
 
   return (
-    <header className="h-16 border-b bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-10">
+    <header className="h-16 border-b bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-50">
       <div className="flex items-center gap-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

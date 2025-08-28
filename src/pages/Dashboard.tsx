@@ -71,14 +71,14 @@ const Dashboard = () => {
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar activeView={activeView} onViewChange={setActiveView} />
         
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 relative">
           <DashboardHeader 
             onViewChange={setActiveView}
             setShowCreateProject={setShowCreateProject}
             setShowCreateTask={setShowCreateTask}
           />
           
-          <main className="flex-1 p-6 overflow-auto">
+          <main className="flex-1 p-6 overflow-auto pt-6">
             <div className="max-w-7xl mx-auto space-y-6">
               {renderMainContent()}
             </div>
