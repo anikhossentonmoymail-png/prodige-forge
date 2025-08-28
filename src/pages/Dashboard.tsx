@@ -8,12 +8,17 @@ import { CalendarView } from "@/components/dashboard/CalendarView"
 import { TeamSection } from "@/components/dashboard/TeamSection"
 import { NotificationsPanel } from "@/components/dashboard/NotificationsPanel"
 import { AIAssistant } from "@/components/dashboard/AIAssistant"
+import { NotesSection } from "@/components/dashboard/NotesSection"
+import { CreateProjectModal } from "@/components/dashboard/CreateProjectModal"
+import { CreateTaskModal } from "@/components/dashboard/CreateTaskModal"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
-export type DashboardView = 'overview' | 'tasks' | 'calendar' | 'team' | 'notifications' | 'ai-assistant' | 'settings'
+export type DashboardView = 'overview' | 'tasks' | 'calendar' | 'team' | 'notifications' | 'ai-assistant' | 'settings' | 'notes'
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('overview')
+  const [showCreateProject, setShowCreateProject] = useState(false)
+  const [showCreateTask, setShowCreateTask] = useState(false)
 
   const renderMainContent = () => {
     switch (activeView) {
@@ -47,6 +52,8 @@ const Dashboard = () => {
         return <NotificationsPanel />
       case 'ai-assistant':
         return <AIAssistant />
+      case 'notes':
+        return <NotesSection />
       case 'settings':
         return (
           <div className="bg-card rounded-lg p-8">
@@ -65,7 +72,11 @@ const Dashboard = () => {
         <DashboardSidebar activeView={activeView} onViewChange={setActiveView} />
         
         <div className="flex-1 flex flex-col min-w-0">
-          <DashboardHeader />
+          <DashboardHeader 
+            onViewChange={setActiveView}
+            setShowCreateProject={setShowCreateProject}
+            setShowCreateTask={setShowCreateTask}
+          />
           
           <main className="flex-1 p-6 overflow-auto">
             <div className="max-w-7xl mx-auto space-y-6">
@@ -74,6 +85,25 @@ const Dashboard = () => {
           </main>
         </div>
       </div>
+
+      {/* Modals */}
+      <CreateProjectModal 
+        open={showCreateProject} 
+        onOpenChange={setShowCreateProject}
+        onProjectCreate={(project) => {
+          console.log('New project created:', project)
+          // Here you would typically save to your backend
+        }}
+      />
+      
+      <CreateTaskModal 
+        open={showCreateTask} 
+        onOpenChange={setShowCreateTask}
+        onTaskCreate={(task) => {
+          console.log('New task created:', task)
+          // Here you would typically save to your backend
+        }}
+      />
     </SidebarProvider>
   )
 }

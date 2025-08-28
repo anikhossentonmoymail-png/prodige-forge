@@ -11,8 +11,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import type { DashboardView } from "@/pages/Dashboard"
 
-export const DashboardHeader = () => {
+interface DashboardHeaderProps {
+  onViewChange?: (view: DashboardView) => void
+  setShowCreateProject?: (show: boolean) => void
+  setShowCreateTask?: (show: boolean) => void
+}
+
+export const DashboardHeader = ({ onViewChange, setShowCreateProject, setShowCreateTask }: DashboardHeaderProps) => {
+  const setActiveView = onViewChange || (() => {})
+
   return (
     <header className="h-16 border-b bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-10">
       <div className="flex items-center gap-4">
@@ -32,21 +41,32 @@ export const DashboardHeader = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Add New Button */}
-        <Button 
-          className="bg-primary hover:bg-primary/90" 
-          size="sm"
-          onClick={() => {
-            const taskName = prompt("Enter task name:");
-            if (taskName) {
-              alert(`Creating task: ${taskName}`);
-              // Here you would typically call an API to create the task
-            }
-          }}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add new
-        </Button>
+        {/* Add New Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              className="bg-primary hover:bg-primary/90" 
+              size="sm"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add new
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-48">
+            <DropdownMenuItem onClick={() => setShowCreateProject?.(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Project
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setShowCreateTask?.(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Task
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setActiveView('notes')}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Note
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         
         {/* Search */}
         <div className="relative w-64">

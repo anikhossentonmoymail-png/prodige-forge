@@ -12,7 +12,8 @@ import {
   Search,
   ChevronDown,
   Plus,
-  Bot
+  Bot,
+  FileText
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -43,6 +44,7 @@ const menuItems = [
   { id: 'calendar', title: 'Calendar', icon: Calendar },
   { id: 'team', title: 'Team', icon: Users },
   { id: 'ai-assistant', title: 'AI Assistant', icon: Bot },
+  { id: 'notes', title: 'Notes', icon: FileText },
   { id: 'notifications', title: 'Notifications', icon: Bell },
 ]
 
@@ -104,15 +106,6 @@ export const DashboardSidebar = ({ activeView, onViewChange }: DashboardSidebarP
           </div>
         )}
 
-        {/* Quick Actions */}
-        {!collapsed && (
-          <div className="p-4 border-b">
-            <Button className="w-full bg-primary hover:bg-primary/90" size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Add new
-            </Button>
-          </div>
-        )}
 
         {/* Main Navigation */}
         <SidebarGroup>
