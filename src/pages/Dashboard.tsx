@@ -13,7 +13,7 @@ import { CreateProjectModal } from "@/components/dashboard/CreateProjectModal"
 import { CreateTaskModal } from "@/components/dashboard/CreateTaskModal"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
-export type DashboardView = 'overview' | 'tasks' | 'calendar' | 'team' | 'notifications' | 'ai-assistant' | 'settings' | 'notes'
+export type DashboardView = 'overview' | 'tasks' | 'calendar' | 'team' | 'notifications' | 'ai-assistant' | 'settings' | 'notes' | 'add-team-member'
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('overview')
@@ -27,10 +27,10 @@ const Dashboard = () => {
           <div className="space-y-6">
             <ProjectOverview />
             <div className="grid lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-6">
-                <TaskKanban />
-                <TaskList />
-              </div>
+            <div className="lg:col-span-2 space-y-6">
+              <TaskKanban onCreateTaskClick={() => setShowCreateTask(true)} />
+              <TaskList />
+            </div>
               <div>
                 <AIAssistant />
               </div>
@@ -40,14 +40,16 @@ const Dashboard = () => {
       case 'tasks':
         return (
           <div className="space-y-6">
-            <TaskKanban />
+            <TaskKanban onCreateTaskClick={() => setShowCreateTask(true)} />
             <TaskList />
           </div>
         )
       case 'calendar':
         return <CalendarView />
       case 'team':
-        return <TeamSection />
+        return <TeamSection onShowAddForm={(show) => show && setActiveView('add-team-member')} />
+      case 'add-team-member':
+        return <TeamSection showAddForm={true} />
       case 'notifications':
         return <NotificationsPanel />
       case 'ai-assistant':

@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { EditTaskModal } from "./EditTaskModal"
 
 interface Task {
   id: string
@@ -81,9 +82,11 @@ const getPriorityColor = (priority: string) => {
   }
 }
 
-export const TaskKanban = () => {
+export const TaskKanban = ({ onCreateTaskClick }: { onCreateTaskClick?: () => void }) => {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [draggedTask, setDraggedTask] = useState<string | null>(null)
+  const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   const handleDragStart = (taskId: string) => {
     setDraggedTask(taskId)
@@ -110,12 +113,38 @@ export const TaskKanban = () => {
     return tasks.filter(task => task.status === status)
   }
 
+  const handleEditTask = (task: Task) => {
+    setEditingTask(task)
+    setShowEditModal(true)
+  }
+
+  const handleTaskUpdate = (updatedTask: Task) => {
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === updatedTask.id ? updatedTask : task
+      )
+    )
+  }
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId))
+  }
+
+  const handleDuplicateTask = (task: Task) => {
+    const newTask = {
+      ...task,
+      id: Date.now().toString(),
+      title: `${task.title} (Copy)`
+    }
+    setTasks(prevTasks => [...prevTasks, newTask])
+  }
+
   return (
     <Card className="h-fit">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>Task Board</span>
-          <Button size="sm" variant="outline">
+          <Button size="sm" variant="outline" onClick={() => onCreateTaskClick?.()}>
             <Plus className="h-4 w-4 mr-2" />
             Add Task
           </Button>
@@ -157,9 +186,18 @@ export const TaskKanban = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit Task</DropdownMenuItem>
-                          <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEditTask(task)}>
+                            Edit Task
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicateTask(task)}>
+                            Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            className="text-destructive"
+                            onClick={() => handleDeleteTask(task.id)}
+                          >
+                            Delete
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -194,6 +232,14 @@ export const TaskKanban = () => {
           ))}
         </div>
       </CardContent>
+
+      {/* Edit Task Modal */}
+      <EditTaskModal
+        open={showEditModal}
+        onOpenChange={setShowEditModal}
+        task={editingTask}
+        onTaskUpdate={handleTaskUpdate}
+      />
     </Card>
   )
 }

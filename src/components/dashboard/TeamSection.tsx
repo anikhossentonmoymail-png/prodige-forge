@@ -2,28 +2,41 @@ import { Plus, UserPlus, Users, Mail } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { AddTeamMemberForm } from "./AddTeamMemberForm"
 
-export const TeamSection = () => {
-  const [teamMembers, setTeamMembers] = useState<any[]>([])
+interface TeamMember {
+  id: string
+  name: string
+  email: string
+  role: string
+  status: "Active" | "Away" | "Busy" | "Offline"
+  fallback: string
+  activeTasks: number
+  completedTasks: number
+}
+
+export const TeamSection = ({ showAddForm = false, onShowAddForm }: { 
+  showAddForm?: boolean
+  onShowAddForm?: (show: boolean) => void 
+}) => {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   
-  const handleAddMember = () => {
-    const name = prompt("Enter team member name:");
-    const email = prompt("Enter team member email:");
-    const role = prompt("Enter team member role:");
-    
-    if (name && email && role) {
-      const newMember = {
-        id: Date.now().toString(),
-        name,
-        email,
-        role,
-        status: "Active",
-        fallback: name.split(' ').map(n => n[0]).join('').toUpperCase(),
-        activeTasks: 0,
-        completedTasks: 0
-      }
-      setTeamMembers([...teamMembers, newMember])
+  const handleAddMember = (memberData: any) => {
+    const newMember: TeamMember = {
+      id: memberData.id,
+      name: memberData.name,
+      email: memberData.email,
+      role: memberData.role,
+      status: "Active",
+      fallback: memberData.name.split(' ').map((n: string) => n[0]).join('').toUpperCase(),
+      activeTasks: 0,
+      completedTasks: 0
     }
+    setTeamMembers([...teamMembers, newMember])
+  }
+
+  if (showAddForm) {
+    return <AddTeamMemberForm onMemberAdd={handleAddMember} />
   }
 
   if (teamMembers.length === 0) {
@@ -48,7 +61,7 @@ export const TeamSection = () => {
                 </p>
               </div>
               <div className="flex gap-3 justify-center">
-                <Button onClick={handleAddMember} className="bg-primary hover:bg-primary/90">
+                <Button onClick={() => onShowAddForm?.(true)} className="bg-primary hover:bg-primary/90">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Team Member
                 </Button>
@@ -110,7 +123,7 @@ export const TeamSection = () => {
               <Button 
                 variant="outline" 
                 className="h-auto p-4 flex-col items-start"
-                onClick={handleAddMember}
+                onClick={() => onShowAddForm?.(true)}
               >
                 <UserPlus className="h-5 w-5 mb-2" />
                 <div className="text-left">
@@ -186,7 +199,7 @@ export const TeamSection = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Team Members ({teamMembers.length})</CardTitle>
-            <Button onClick={handleAddMember}>
+            <Button onClick={() => onShowAddForm?.(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add Member
             </Button>
