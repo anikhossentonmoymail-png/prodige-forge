@@ -16,29 +16,28 @@ export const DashboardHeader = () => {
   return (
     <header className="h-16 border-b bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-10">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <Button className="bg-primary hover:bg-primary/90" size="sm">
-            <Plus className="h-4 w-4 mr-2" />
-            Add new
-          </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                Today
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Today</DropdownMenuItem>
-              <DropdownMenuItem>This Week</DropdownMenuItem>
-              <DropdownMenuItem>This Month</DropdownMenuItem>
-              <DropdownMenuItem>Custom Range</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              Today
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Today</DropdownMenuItem>
+            <DropdownMenuItem>This Week</DropdownMenuItem>
+            <DropdownMenuItem>This Month</DropdownMenuItem>
+            <DropdownMenuItem>Custom Range</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="flex items-center gap-4">
+        {/* Add New Button */}
+        <Button className="bg-primary hover:bg-primary/90" size="sm">
+          <Plus className="h-4 w-4 mr-2" />
+          Add new
+        </Button>
+        
         {/* Search */}
         <div className="relative w-64">
           <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
