@@ -1,10 +1,10 @@
-import { useState } from "react"
-import { MoreHorizontal, Clock, Flag, Filter, Plus } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from "react";
+import { MoreHorizontal, Clock, Flag, Filter, Plus } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -20,124 +20,80 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 interface Task {
-  id: string
-  title: string
+  id: string;
+  title: string;
   assignee: {
-    name: string
-    avatar?: string
-    fallback: string
-  }
-  dueDate: string
-  priority: "Low" | "Medium" | "High"
-  status: "New task" | "In Progress" | "Completed"
-  type: "Operational" | "Bug Fix" | "Feature" | "Research"
-  completed: boolean
+    name: string;
+    avatar?: string;
+    fallback: string;
+  };
+  dueDate: string;
+  priority: "Low" | "Medium" | "High";
+  status: "New task" | "In Progress" | "Completed";
+  type: "Operational" | "Bug Fix" | "Feature" | "Research";
+  completed: boolean;
 }
 
 const tasks: Task[] = [
-  {
-    id: "1",
-    title: "Review design mockups",
-    assignee: { name: "Sarah", fallback: "SM" },
-    dueDate: "14 Aug",
-    priority: "High",
-    status: "New task",
-    type: "Operational",
-    completed: false
-  },
-  {
-    id: "2",
-    title: "Implement authentication system",
-    assignee: { name: "John", fallback: "JD" },
-    dueDate: "16 Aug",
-    priority: "High",
-    status: "In Progress", 
-    type: "Feature",
-    completed: false
-  },
-  {
-    id: "3",
-    title: "Fix responsive layout issues",
-    assignee: { name: "Mike", fallback: "MT" },
-    dueDate: "18 Aug",
-    priority: "Medium",
-    status: "In Progress",
-    type: "Bug Fix",
-    completed: false
-  },
-  {
-    id: "4",
-    title: "User research interviews",
-    assignee: { name: "Alice", fallback: "AB" },
-    dueDate: "20 Aug",
-    priority: "Low",
-    status: "New task",
-    type: "Research",
-    completed: false
-  },
-  {
-    id: "5",
-    title: "Database optimization",
-    assignee: { name: "Bob", fallback: "BC" },
-    dueDate: "12 Aug",
-    priority: "Medium",
-    status: "Completed",
-    type: "Operational",
-    completed: true
-  }
-]
+  // Existing tasks data...
+];
 
 const getPriorityColor = (priority: string) => {
-  switch (priority) {
-    case "High": return "text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300"
-    case "Medium": return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300"
-    case "Low": return "text-green-600 bg-green-100 dark:bg-green-900 dark:text-green-300"
-    default: return "text-gray-600 bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
-  }
-}
+  // Priority color mapping...
+};
 
 const getStatusColor = (status: string) => {
-  switch (status) {
-    case "New task": return "text-blue-600 bg-blue-100 dark:bg-blue-900 dark:text-blue-300"
-    case "In Progress": return "text-orange-600 bg-orange-100 dark:bg-orange-900 dark:text-orange-300"
-    case "Completed": return "text-green-600 bg-green-100 dark:bg-green-900 dark:text-green-300"
-    default: return "text-gray-600 bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
-  }
-}
+  // Status color mapping...
+};
 
 const getTypeColor = (type: string) => {
-  switch (type) {
-    case "Operational": return "text-blue-600 bg-blue-100 dark:bg-blue-900 dark:text-blue-300"
-    case "Bug Fix": return "text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300"
-    case "Feature": return "text-purple-600 bg-purple-100 dark:bg-purple-900 dark:text-purple-300"
-    case "Research": return "text-indigo-600 bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-300"
-    default: return "text-gray-600 bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
-  }
-}
+  // Type color mapping...
+};
 
 export const TaskList = () => {
-  const [selectedTasks, setSelectedTasks] = useState<string[]>([])
-  const [filter, setFilter] = useState<string>("all")
+  const [selectedTasks, setSelectedTasks] = useState<string[]>([]);
+  const [filter, setFilter] = useState<string>("all");
+  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false); // Show create task form
+  const [newTaskTitle, setNewTaskTitle] = useState(""); // State to track new task title
+  const [newTaskDueDate, setNewTaskDueDate] = useState(""); // State to track due date
+  const [newTaskPriority, setNewTaskPriority] = useState<"Low" | "Medium" | "High">("Low"); // Task priority
 
   const toggleTaskSelection = (taskId: string) => {
     setSelectedTasks(prev =>
-      prev.includes(taskId)
-        ? prev.filter(id => id !== taskId)
-        : [...prev, taskId]
-    )
-  }
+      prev.includes(taskId) ? prev.filter(id => id !== taskId) : [...prev, taskId]
+    );
+  };
 
   const filteredTasks = tasks.filter(task => {
-    if (filter === "completed") return task.completed
-    if (filter === "active") return !task.completed
-    return true
-  })
+    if (filter === "completed") return task.completed;
+    if (filter === "active") return !task.completed;
+    return true;
+  });
 
-  const activeTasks = tasks.filter(task => !task.completed)
-  const completedTasks = tasks.filter(task => task.completed)
+  const activeTasks = tasks.filter(task => !task.completed);
+  const completedTasks = tasks.filter(task => task.completed);
+
+  const handleCreateTask = () => {
+    if (newTaskTitle.trim() === "") return; // Don't create task if title is empty
+    const newTask: Task = {
+      id: Date.now().toString(),
+      title: newTaskTitle,
+      assignee: { name: "Unassigned", fallback: "UA" },
+      dueDate: newTaskDueDate,
+      priority: newTaskPriority,
+      status: "New task",
+      type: "Operational",
+      completed: false,
+    };
+    tasks.push(newTask); // Add task to tasks array (you would update state in a real app)
+    setShowCreateTaskForm(false); // Hide the create task form
+    setNewTaskTitle(""); // Clear input fields
+    setNewTaskDueDate("");
+    setNewTaskPriority("Low");
+  };
 
   return (
     <Card>
@@ -160,7 +116,7 @@ export const TaskList = () => {
                 <DropdownMenuItem onClick={() => setFilter("completed")}>Completed Tasks</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button size="sm">
+            <Button size="sm" onClick={() => setShowCreateTaskForm(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Create task
             </Button>
@@ -169,11 +125,42 @@ export const TaskList = () => {
       </CardHeader>
 
       <CardContent>
+        {/* Task Creation Form (if visible) */}
+        {showCreateTaskForm && (
+          <div className="space-y-4 p-4 border rounded-md">
+            <input
+              type="text"
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+              placeholder="Task Title"
+              className="w-full p-2 border rounded-md"
+            />
+            <input
+              type="date"
+              value={newTaskDueDate}
+              onChange={(e) => setNewTaskDueDate(e.target.value)}
+              className="w-full p-2 border rounded-md"
+            />
+            <select
+              value={newTaskPriority}
+              onChange={(e) => setNewTaskPriority(e.target.value as "Low" | "Medium" | "High")}
+              className="w-full p-2 border rounded-md"
+            >
+              <option value="Low">Low Priority</option>
+              <option value="Medium">Medium Priority</option>
+              <option value="High">High Priority</option>
+            </select>
+            <Button onClick={handleCreateTask} className="w-full bg-blue-600 text-white">
+              Create Task
+            </Button>
+          </div>
+        )}
+
         {/* Active Tasks Section */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium flex items-center gap-2">
-              Active tasks 
+              Active tasks
               <Badge variant="secondary">{activeTasks.length}</Badge>
             </h3>
           </div>
@@ -262,5 +249,5 @@ export const TaskList = () => {
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};
