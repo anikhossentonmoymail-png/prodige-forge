@@ -33,7 +33,17 @@ export const DashboardHeader = () => {
 
       <div className="flex items-center gap-4">
         {/* Add New Button */}
-        <Button className="bg-primary hover:bg-primary/90" size="sm">
+        <Button 
+          className="bg-primary hover:bg-primary/90" 
+          size="sm"
+          onClick={() => {
+            const taskName = prompt("Enter task name:");
+            if (taskName) {
+              alert(`Creating task: ${taskName}`);
+              // Here you would typically call an API to create the task
+            }
+          }}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Add new
         </Button>

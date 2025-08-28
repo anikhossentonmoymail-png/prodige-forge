@@ -1,216 +1,196 @@
-import { Bell, CheckCircle, Clock, AlertCircle, MessageSquare, Users, Calendar } from "lucide-react"
+import { Bell, CheckCircle, Clock, AlertCircle, MessageSquare, Users, Calendar, Settings as SettingsIcon } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
+import { useState } from "react"
 
-interface Notification {
-  id: string
-  type: "task" | "deadline" | "comment" | "team" | "meeting"
-  title: string
-  message: string
-  time: string
-  read: boolean
-  sender?: {
-    name: string
-    avatar?: string
-    fallback: string
-  }
-}
-
-const notifications: Notification[] = [
-  {
-    id: "1",
-    type: "task",
-    title: "New task assigned",
-    message: "You have been assigned to 'Review design mockups' in Website Redesign project",
-    time: "2 minutes ago",
-    read: false,
-    sender: { name: "Sarah", fallback: "SM" }
-  },
-  {
-    id: "2",
-    type: "deadline",
-    title: "Deadline approaching",
-    message: "Task 'Implement authentication' is due in 2 hours",
-    time: "1 hour ago", 
-    read: false
-  },
-  {
-    id: "3",
-    type: "comment",
-    title: "New comment on task",
-    message: "Mike commented on 'Fix responsive layout issues': Great progress on the mobile view!",
-    time: "3 hours ago",
-    read: true,
-    sender: { name: "Mike", fallback: "MJ" }
-  },
-  {
-    id: "4",
-    type: "team",
-    title: "Team member joined",
-    message: "Alice Brown joined the Mobile App Development project",
-    time: "5 hours ago",
-    read: true,
-    sender: { name: "Alice", fallback: "AB" }
-  },
-  {
-    id: "5",
-    type: "meeting",
-    title: "Meeting reminder",
-    message: "Daily standup meeting starts in 30 minutes",
-    time: "8 hours ago",
-    read: true
-  },
-  {
-    id: "6",
-    type: "task",
-    title: "Task completed",
-    message: "Bob marked 'Database optimization' as completed",
-    time: "1 day ago",
-    read: true,
-    sender: { name: "Bob", fallback: "BW" }
-  }
-]
-
-const getNotificationIcon = (type: string) => {
-  switch (type) {
-    case "task": return CheckCircle
-    case "deadline": return Clock
-    case "comment": return MessageSquare
-    case "team": return Users
-    case "meeting": return Calendar
-    default: return Bell
-  }
-}
-
-const getNotificationColor = (type: string) => {
-  switch (type) {
-    case "task": return "text-blue-600 bg-blue-100 dark:bg-blue-900"
-    case "deadline": return "text-red-600 bg-red-100 dark:bg-red-900"
-    case "comment": return "text-green-600 bg-green-100 dark:bg-green-900"
-    case "team": return "text-purple-600 bg-purple-100 dark:bg-purple-900"
-    case "meeting": return "text-orange-600 bg-orange-100 dark:bg-orange-900"
-    default: return "text-gray-600 bg-gray-100 dark:bg-gray-900"
-  }
+interface NotificationSettings {
+  taskAssignments: boolean
+  deadlineReminders: boolean
+  teamUpdates: boolean
+  comments: boolean
 }
 
 export const NotificationsPanel = () => {
-  const unreadCount = notifications.filter(n => !n.read).length
+  const [notifications] = useState<any[]>([]) // Empty notifications by default
+  const [settings, setSettings] = useState<NotificationSettings>({
+    taskAssignments: true,
+    deadlineReminders: true,
+    teamUpdates: true,
+    comments: true
+  })
+
+  const handleSettingChange = (setting: keyof NotificationSettings) => {
+    setSettings(prev => ({
+      ...prev,
+      [setting]: !prev[setting]
+    }))
+  }
 
   return (
     <div className="space-y-6">
+      {/* Notifications List */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CardTitle>Notifications</CardTitle>
-              {unreadCount > 0 && (
-                <Badge variant="destructive">{unreadCount} new</Badge>
-              )}
+              <Badge variant="outline">0 new</Badge>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                Mark all as read
-              </Button>
-              <Button variant="outline" size="sm">
-                Settings
-              </Button>
-            </div>
+            <Button variant="outline" size="sm">
+              Mark all as read
+            </Button>
           </div>
         </CardHeader>
 
         <CardContent>
-          <div className="space-y-4">
-            {notifications.map((notification) => {
-              const Icon = getNotificationIcon(notification.type)
-              
-              return (
+          {notifications.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="bg-muted/50 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+                <Bell className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">No notifications yet</h3>
+              <p className="text-muted-foreground mb-6">
+                You'll see notifications here when there's activity on your tasks and projects.
+              </p>
+              <div className="space-y-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 justify-center">
+                  <CheckCircle className="h-4 w-4 text-blue-500" />
+                  <span>Task assignments and updates</span>
+                </div>
+                <div className="flex items-center gap-2 justify-center">
+                  <Clock className="h-4 w-4 text-red-500" />
+                  <span>Deadline reminders</span>
+                </div>
+                <div className="flex items-center gap-2 justify-center">
+                  <Users className="h-4 w-4 text-purple-500" />
+                  <span>Team member activities</span>
+                </div>
+                <div className="flex items-center gap-2 justify-center">
+                  <MessageSquare className="h-4 w-4 text-green-500" />
+                  <span>Comments and mentions</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`
-                    p-4 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50
-                    ${!notification.read ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800' : 'bg-background'}
-                  `}
+                  className="p-4 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50"
                 >
-                  <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-full ${getNotificationColor(notification.type)}`}>
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className={`text-sm font-medium ${!notification.read ? 'text-foreground' : 'text-muted-foreground'}`}>
-                          {notification.title}
-                        </h4>
-                        <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
-                          {notification.time}
-                        </span>
-                      </div>
-                      
-                      <p className="text-sm text-muted-foreground">
-                        {notification.message}
-                      </p>
-                      
-                      {notification.sender && (
-                        <div className="flex items-center gap-2 mt-2">
-                          <Avatar className="h-6 w-6">
-                            <AvatarImage src={notification.sender.avatar} />
-                            <AvatarFallback className="text-xs">{notification.sender.fallback}</AvatarFallback>
-                          </Avatar>
-                          <span className="text-xs text-muted-foreground">{notification.sender.name}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {!notification.read && (
-                      <div className="h-2 w-2 bg-blue-600 rounded-full mt-2" />
-                    )}
-                  </div>
+                  {/* Notification content would go here */}
                 </div>
-              )
-            })}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Notification Settings */}
       <Card>
         <CardHeader>
-          <CardTitle>Notification Preferences</CardTitle>
+          <div className="flex items-center gap-2">
+            <SettingsIcon className="h-5 w-5" />
+            <CardTitle>Notification Preferences</CardTitle>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Task Assignments</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-blue-500" />
+                  <p className="font-medium">Task Assignments</p>
+                </div>
                 <p className="text-sm text-muted-foreground">Get notified when tasks are assigned to you</p>
               </div>
-              <Button variant="outline" size="sm">Enabled</Button>
+              <Switch 
+                checked={settings.taskAssignments}
+                onCheckedChange={() => handleSettingChange('taskAssignments')}
+              />
             </div>
             
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Deadline Reminders</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-red-500" />
+                  <p className="font-medium">Deadline Reminders</p>
+                </div>
                 <p className="text-sm text-muted-foreground">Receive reminders for upcoming deadlines</p>
               </div>
-              <Button variant="outline" size="sm">Enabled</Button>
+              <Switch 
+                checked={settings.deadlineReminders}
+                onCheckedChange={() => handleSettingChange('deadlineReminders')}
+              />
             </div>
             
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Team Updates</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-purple-500" />
+                  <p className="font-medium">Team Updates</p>
+                </div>
                 <p className="text-sm text-muted-foreground">Stay informed about team changes and updates</p>
               </div>
-              <Button variant="outline" size="sm">Enabled</Button>
+              <Switch 
+                checked={settings.teamUpdates}
+                onCheckedChange={() => handleSettingChange('teamUpdates')}
+              />
             </div>
             
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Comments & Mentions</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-green-500" />
+                  <p className="font-medium">Comments & Mentions</p>
+                </div>
                 <p className="text-sm text-muted-foreground">Get notified when someone comments or mentions you</p>
               </div>
-              <Button variant="outline" size="sm">Enabled</Button>
+              <Switch 
+                checked={settings.comments}
+                onCheckedChange={() => handleSettingChange('comments')}
+              />
+            </div>
+          </div>
+          
+          <div className="mt-6 pt-6 border-t">
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">
+                Email Notifications
+              </Button>
+              <Button variant="outline" size="sm">
+                Push Notifications
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Activity Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Activity Summary</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <CheckCircle className="h-6 w-6 text-blue-500 mx-auto mb-2" />
+              <p className="text-sm font-medium">0 Tasks Assigned</p>
+              <p className="text-xs text-muted-foreground">This week</p>
+            </div>
+            
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <Clock className="h-6 w-6 text-red-500 mx-auto mb-2" />
+              <p className="text-sm font-medium">0 Due Soon</p>
+              <p className="text-xs text-muted-foreground">Next 24 hours</p>
+            </div>
+            
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <MessageSquare className="h-6 w-6 text-green-500 mx-auto mb-2" />
+              <p className="text-sm font-medium">0 Comments</p>
+              <p className="text-xs text-muted-foreground">Today</p>
             </div>
           </div>
         </CardContent>

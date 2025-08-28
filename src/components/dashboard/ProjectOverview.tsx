@@ -85,7 +85,17 @@ export const ProjectOverview = () => {
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground">Overview of your projects and tasks</p>
         </div>
-        <Button className="bg-gradient-primary hover:opacity-90">
+        <Button 
+          className="bg-gradient-primary hover:opacity-90"
+          onClick={() => {
+            // Create new project functionality
+            const projectName = prompt("Enter project name:");
+            if (projectName) {
+              alert(`Creating project: ${projectName}`);
+              // Here you would typically call an API to create the project
+            }
+          }}
+        >
           Create New Project
         </Button>
       </div>
