@@ -24,20 +24,8 @@ export const DashboardHeader = ({ onViewChange, setShowCreateProject, setShowCre
 
   return (
     <header className="h-16 border-b bg-card/50 backdrop-blur-sm px-6 flex items-center justify-between sticky top-0 z-50">
-      <div className="flex items-center gap-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              Today
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Today</DropdownMenuItem>
-            <DropdownMenuItem>This Week</DropdownMenuItem>
-            <DropdownMenuItem>This Month</DropdownMenuItem>
-            <DropdownMenuItem>Custom Range</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="flex items-center">
+        {/* Empty left side for clean layout */}
       </div>
 
       <div className="flex items-center gap-4">
