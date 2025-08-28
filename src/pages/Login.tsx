@@ -1,44 +1,49 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import { Eye, EyeOff, LogIn, Mail, Lock } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { toast } from "sonner"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Eye, EyeOff, LogIn, Mail, Lock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Use navigate to redirect after successful login
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
+    e.preventDefault();
+    setIsLoading(true);
+
     // Basic validation
     if (!formData.email || !formData.password) {
-      toast.error("Please fill in all fields")
-      setIsLoading(false)
-      return
+      toast.error("Please fill in all fields");
+      setIsLoading(false);
+      return;
     }
 
-    // Simulate login
+    // Simulate login (Replace this with actual API call in production)
     setTimeout(() => {
-      toast.success("Login successful! Welcome back.")
-      setIsLoading(false)
-      // In a real app, redirect to dashboard
-    }, 1500)
-  }
+      toast.success("Login successful! Welcome back.");
+      setIsLoading(false);
+
+      // Redirect to dashboard after successful login
+      navigate('/dashboard'); // Redirect to dashboard page
+    }, 1500);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-hero py-12 px-4 sm:px-6 lg:px-8">
@@ -194,7 +199,7 @@ const Login = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
