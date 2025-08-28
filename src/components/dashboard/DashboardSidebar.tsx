@@ -11,7 +11,8 @@ import {
   LogOut,
   Search,
   ChevronDown,
-  Plus
+  Plus,
+  Bot
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -41,6 +42,7 @@ const menuItems = [
   { id: 'tasks', title: 'Tasks', icon: CheckSquare },
   { id: 'calendar', title: 'Calendar', icon: Calendar },
   { id: 'team', title: 'Team', icon: Users },
+  { id: 'ai-assistant', title: 'AI Assistant', icon: Bot },
   { id: 'notifications', title: 'Notifications', icon: Bell },
 ]
 

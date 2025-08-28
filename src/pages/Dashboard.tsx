@@ -7,9 +7,10 @@ import { TaskList } from "@/components/dashboard/TaskList"
 import { CalendarView } from "@/components/dashboard/CalendarView"
 import { TeamSection } from "@/components/dashboard/TeamSection"
 import { NotificationsPanel } from "@/components/dashboard/NotificationsPanel"
+import { AIAssistant } from "@/components/dashboard/AIAssistant"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
-export type DashboardView = 'overview' | 'tasks' | 'calendar' | 'team' | 'notifications' | 'settings'
+export type DashboardView = 'overview' | 'tasks' | 'calendar' | 'team' | 'notifications' | 'ai-assistant' | 'settings'
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('overview')
@@ -20,9 +21,14 @@ const Dashboard = () => {
         return (
           <div className="space-y-6">
             <ProjectOverview />
-            <div className="grid lg:grid-cols-2 gap-6">
-              <TaskKanban />
-              <TaskList />
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <TaskKanban />
+                <TaskList />
+              </div>
+              <div>
+                <AIAssistant />
+              </div>
             </div>
           </div>
         )
@@ -39,6 +45,8 @@ const Dashboard = () => {
         return <TeamSection />
       case 'notifications':
         return <NotificationsPanel />
+      case 'ai-assistant':
+        return <AIAssistant />
       case 'settings':
         return (
           <div className="bg-card rounded-lg p-8">
