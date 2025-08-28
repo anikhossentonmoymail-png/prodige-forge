@@ -13,6 +13,7 @@ import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,9 @@ const App = () => (
         <BrowserRouter>
           <div className="flex flex-col min-h-screen">
             <Routes>
+              {/* Dashboard route without header/footer */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              
               {/* Auth routes without header/footer */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
@@ -41,7 +45,6 @@ const App = () => (
                       <Route path="/solutions" element={<Solutions />} />
                       <Route path="/pricing" element={<Pricing />} />
                       <Route path="/contact" element={<Contact />} />
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
