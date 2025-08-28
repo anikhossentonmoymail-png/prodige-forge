@@ -25,34 +25,62 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="flex flex-col min-h-screen">
-            <Routes>
-              {/* Dashboard route without header/footer */}
-              <Route path="/dashboard" element={<Dashboard />} />
-              
-              {/* Auth routes without header/footer */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              
-              {/* Main routes with header/footer */}
-              <Route path="/*" element={
-                <>
-                  <Header />
-                  <main className="flex-1">
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/use-cases" element={<UseCases />} />
-                      <Route path="/solutions" element={<Solutions />} />
-                      <Route path="/pricing" element={<Pricing />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </main>
-                  <Footer />
-                </>
-              } />
-            </Routes>
-          </div>
+          <Routes>
+            {/* Dashboard route without header/footer */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            
+            {/* Auth routes without header/footer */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            
+            {/* Main routes with header/footer */}
+            <Route path="/" element={
+              <>
+                <Header />
+                <main className="flex-1">
+                  <Index />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/use-cases" element={
+              <>
+                <Header />
+                <main className="flex-1">
+                  <UseCases />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/solutions" element={
+              <>
+                <Header />
+                <main className="flex-1">
+                  <Solutions />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/pricing" element={
+              <>
+                <Header />
+                <main className="flex-1">
+                  <Pricing />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/contact" element={
+              <>
+                <Header />
+                <main className="flex-1">
+                  <Contact />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
