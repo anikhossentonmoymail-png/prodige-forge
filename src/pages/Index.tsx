@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { ArrowRight, Calendar, CheckSquare, BarChart, Users, Clock, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { FeatureShowcase } from "@/components/FeatureShowcase"
 
 const features = [
   {
@@ -75,6 +76,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Feature Showcase */}
+      <FeatureShowcase />
 
       {/* Features Section */}
       <section className="py-20 sm:py-32">
