@@ -118,7 +118,11 @@ const getTypeColor = (type: string) => {
   }
 }
 
-export const TaskList = () => {
+interface TaskListProps {
+  onCreateTaskClick?: () => void
+}
+
+export const TaskList = ({ onCreateTaskClick }: TaskListProps) => {
   const [selectedTasks, setSelectedTasks] = useState<string[]>([])
   const [filter, setFilter] = useState<string>("all")
 
@@ -160,7 +164,7 @@ export const TaskList = () => {
                 <DropdownMenuItem onClick={() => setFilter("completed")}>Completed Tasks</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button size="sm">
+            <Button size="sm" onClick={onCreateTaskClick}>
               <Plus className="h-4 w-4 mr-2" />
               Create task
             </Button>

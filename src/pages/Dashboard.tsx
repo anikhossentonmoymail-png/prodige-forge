@@ -29,7 +29,7 @@ const Dashboard = () => {
             <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               <TaskKanban onCreateTaskClick={() => setShowCreateTask(true)} />
-              <TaskList />
+              <TaskList onCreateTaskClick={() => setShowCreateTask(true)} />
             </div>
               <div>
                 <AIAssistant />
@@ -41,7 +41,7 @@ const Dashboard = () => {
         return (
           <div className="space-y-6">
             <TaskKanban onCreateTaskClick={() => setShowCreateTask(true)} />
-            <TaskList />
+            <TaskList onCreateTaskClick={() => setShowCreateTask(true)} />
           </div>
         )
       case 'calendar':
